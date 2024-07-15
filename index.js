@@ -21,6 +21,7 @@ let notes = [
     important: true,
   },
 ];
+app.use(express.static("dist"));
 
 const requestLogger = (request, response, next) => {
   console.log("Method:", request.method);
@@ -71,6 +72,17 @@ app.post("/api/notes", (request, response) => {
 });
 
 app.get("/api/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const note = notes.find((note) => note.id === id);
+  if (note) {
+    response.json(note);
+  } else {
+    console.log("x");
+    response.status(404).end();
+  }
+});
+
+app.put("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
   const note = notes.find((note) => note.id === id);
   if (note) {
